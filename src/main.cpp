@@ -10,22 +10,24 @@
 
 #include <cmath>
 #include <iostream>
- 
-double L1(unsigned m, double x)
-{
-    return -x + m + 1;
-}
- 
-double L2(unsigned m, double x)
-{
-    return 0.5 * (x * x - 2 * (m + 2) * x + (m + 1) * (m + 2));
-}
- 
+#include <complex>
+#include "hypercomplex/complex.hpp"
+
 int main()
 {
-    // spot-checks
-    std::cout << std::assoc_laguerre(1, 10, 0.5) << '=' << L1(10, 0.5) << '\n'
-              << std::assoc_laguerre(2, 10, 0.5) << '=' << L2(10, 0.5) << '\n';
+    std::complex<double> c1(4.5f, 3.98f);
+    std::complex<double> c2(2.81f, 2.33f);
+
+    hypercomplex::complex<double> hc1(4.5f, 3.98f);
+    hypercomplex::complex<double> hc2(2.81f, 2.33f);
+
+    std::cout << c1 << std::endl;
+    c1 *= c2;
+    std::cout << c1 << std::endl;
+
+    std::cout << hc1 << std::endl;
+    hc1 *= hc2;
+    std::cout << hc1 << std::endl;
 }
 
 // footer-begin ------------------------------------------
