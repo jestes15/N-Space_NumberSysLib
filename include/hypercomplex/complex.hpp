@@ -314,28 +314,39 @@ template <typename _UnderlyingType>
 constexpr complex<_UnderlyingType>
 operator/(const complex<_UnderlyingType> &lhs, const complex<_UnderlyingType> &rhs)
 {
+  complex<_UnderlyingType> _r = lhs;
+  _r /= rhs;
+  return _r;
 }
 template <typename _UnderlyingType>
 constexpr complex<_UnderlyingType>
 operator/(const complex<_UnderlyingType> &lhs, const _UnderlyingType &rhs)
 {
+  complex<_UnderlyingType> _r = lhs;
+  _r /= rhs;
+  return _r;
 }
 template <typename _UnderlyingType>
 constexpr complex<_UnderlyingType>
 operator/(const _UnderlyingType &lhs, const complex<_UnderlyingType> &rhs)
 {
+  complex<_UnderlyingType> _r = lhs;
+  _r /= rhs;
+  return _r;
 }
 
 // Unary Operators
 template <typename _UnderlyingType>
 constexpr complex<_UnderlyingType>
-operator+(const complex<_UnderlyingType> &)
+operator+(const complex<_UnderlyingType> &_z)
 {
+  return _z;
 }
 template <typename _UnderlyingType>
 constexpr complex<_UnderlyingType>
-operator-(const complex<_UnderlyingType> &)
+operator-(const complex<_UnderlyingType> &_z)
 {
+  return complex<_UnderlyingType>(-_z.real(), -_z.imag());
 }
 
 // Equality Operators
@@ -394,11 +405,16 @@ template <typename _UnderlyingType>
 _UnderlyingType
 arg(const complex<_UnderlyingType> &_z)
 {
+  return std::atan2(_z.imag(), _z.real());
 }
 template <typename _UnderlyingType>
 constexpr _UnderlyingType
 norm(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _x = _z.real();
+  _UnderlyingType _y = _z.imag();
+
+  return _x * _x + _y * _y;
 }
 template <typename _UnderlyingType>
 constexpr complex<_UnderlyingType>
