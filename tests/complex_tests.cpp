@@ -12,209 +12,305 @@
 
 #include "hypercomplex/complex.hpp"
 
+#include <complex>
+
 using hypercomplex::complex;
-
-template <typename T>
-bool
-almost_equal(T a, T b, T eps = static_cast<T>(1e-6))
-{
-  return std::abs(a - b) < eps;
-}
-
-template <typename T>
-void
-expect_complex_eq(const complex<T> &c, T real, T imag,
-		  T eps = static_cast<T>(1e-6))
-{
-  EXPECT_TRUE(almost_equal(c.real(), real, eps));
-  EXPECT_TRUE(almost_equal(c.imag(), imag, eps));
-}
 
 TEST(ComplexTest, DefaultConstructor)
 {
-  const complex<float> c;
-  EXPECT_FLOAT_EQ(c.real(), 0.0f);
-  EXPECT_FLOAT_EQ(c.imag(), 0.0f);
+  const complex<float> dut;
+  EXPECT_FLOAT_EQ(dut.real(), 0.0f);
+  EXPECT_FLOAT_EQ(dut.imag(), 0.0f);
 }
 
 TEST(ComplexTest, UnderlyingTypeConstructor)
 {
-  const complex<double> c(3.5, -1.2);
-  EXPECT_DOUBLE_EQ(c.real(), 3.5);
-  EXPECT_DOUBLE_EQ(c.imag(), -1.2);
+  const complex<double> dut(3.5, -1.2);
+  EXPECT_DOUBLE_EQ(dut.real(), 3.5);
+  EXPECT_DOUBLE_EQ(dut.imag(), -1.2);
 }
 
 TEST(ComplexTest, ConvertibleTypesConstructor)
 {
-  const complex<float> c(2, 7);
-  EXPECT_FLOAT_EQ(c.real(), 2.0f);
-  EXPECT_FLOAT_EQ(c.imag(), 7.0f);
+  const complex<float> dut(2, 7);
+  EXPECT_FLOAT_EQ(dut.real(), 2.0f);
+  EXPECT_FLOAT_EQ(dut.imag(), 7.0f);
 }
 
 TEST(ComplexTest, CrossTypeConstructor)
 {
-  const complex<float> ci(3, 4);
-  const complex<double> cd(ci);
-  EXPECT_DOUBLE_EQ(cd.real(), 3.0);
-  EXPECT_DOUBLE_EQ(cd.imag(), 4.0);
+  const complex<float> dut1(3, 4);
+  const complex<double> dut2(dut1);
+  EXPECT_DOUBLE_EQ(dut2.real(), 3.0);
+  EXPECT_DOUBLE_EQ(dut2.imag(), 4.0);
 }
 
 //
 // Assignment: scalar and complex
 //
-TEST(ComplexOperators, AssignScalar)
+TEST(ComplexAssignmentOperators, AssignScalar)
 {
-  complex<float> c;
-  c = 2.5f;
-  expect_complex_eq(c, 2.5f, 0.0f);
+  complex<float> dut;
+  dut = 2.5f;
+  EXPECT_FLOAT_EQ(dut.real(), 2.5f);
+  EXPECT_FLOAT_EQ(dut.imag(), 0.0f);
 }
 
-TEST(ComplexOperators, AssignSameType)
+TEST(ComplexAssignmentOperators, AssignSameType)
 {
-  complex<float> a(1.2f, 3.4f);
-  complex<float> b;
-  b = a;
-  expect_complex_eq(b, 1.2f, 3.4f);
+  complex<float> dut1(1.2f, 3.4f);
+  complex<float> dut2;
+  dut2 = dut1;
+  EXPECT_FLOAT_EQ(dut2.real(), 1.2f);
+  EXPECT_FLOAT_EQ(dut2.imag(), 3.4f);
+  EXPECT_FLOAT_EQ(dut1.real(), 1.2f);
+  EXPECT_FLOAT_EQ(dut1.imag(), 3.4f);
 }
 
-TEST(ComplexOperators, AssignCrossType)
+TEST(ComplexAssignmentOperators, AssignCrossType)
 {
-  complex<float> a(2, 3);
-  complex<float> b;
-  b = a;
-  expect_complex_eq(b, 2.0f, 3.0f);
+  complex<float> dut1(2, 3);
+  complex<float> dut2;
+  dut2 = dut1;
+  EXPECT_FLOAT_EQ(dut2.real(), 2.0f);
+  EXPECT_FLOAT_EQ(dut2.imag(), 3.0f);
+  EXPECT_FLOAT_EQ(dut1.real(), 2.0f);
+  EXPECT_FLOAT_EQ(dut1.imag(), 3.0f);
+}
+
+TEST(ComplexAssignmentOperators, AssignCrossTypeWithLiteral)
+{
+  using namespace hypercomplex::complex_literals;
+  const complex<float> dut = 3.0f + 4.0if;
+
+  EXPECT_FLOAT_EQ(dut.real(), 3.0f);
+  EXPECT_FLOAT_EQ(dut.imag(), 4.0f);
 }
 
 //
 // Compound assignment with scalar
 //
-TEST(ComplexOperators, PlusEqualsScalar)
+TEST(ComplexCompoundOperators, PlusEqualsScalar)
 {
-  complex<float> c(1.0f, 2.0f);
-  c += 3.0f;
-  expect_complex_eq(c, 4.0f, 2.0f);
+  complex<float> dut(1.0f, 2.0f);
+  dut += 3.0f;
+  std::complex<float> ref(1.0f, 2.0f);
+  ref += 3.0f;
+
+  EXPECT_FLOAT_EQ(dut.real(), ref.real());
+  EXPECT_FLOAT_EQ(dut.imag(), ref.imag());
 }
 
-TEST(ComplexOperators, MinusEqualsScalar)
+TEST(ComplexCompoundOperators, MinusEqualsScalar)
 {
-  complex<float> c(5.0f, 2.0f);
-  c -= 1.5f;
-  expect_complex_eq(c, 3.5f, 2.0f);
+  complex<float> dut(5.0f, 2.0f);
+  dut -= 1.5f;
+  std::complex<float> ref(5.0f, 2.0f);
+  ref -= 1.5f;
+
+  EXPECT_FLOAT_EQ(dut.real(), ref.real());
+  EXPECT_FLOAT_EQ(dut.imag(), ref.imag());
 }
 
-TEST(ComplexOperators, TimesEqualsScalar)
+TEST(ComplexCompoundOperators, TimesEqualsScalar)
 {
-  complex<float> c(1.0f, 2.0f);
-  c *= 2.0f;
-  expect_complex_eq(c, 2.0f, 4.0f);
+  complex<float> dut(1.0f, 2.0f);
+  dut *= 2.0f;
+
+  std::complex<float> ref(1.0f, 2.0f);
+  ref *= 2.0f;
+
+  EXPECT_FLOAT_EQ(dut.real(), ref.real());
+  EXPECT_FLOAT_EQ(dut.imag(), ref.imag());
 }
 
-TEST(ComplexOperators, DivideEqualsScalar)
+TEST(ComplexCompoundOperators, DivideEqualsScalar)
 {
-  complex<float> c(4.0f, 2.0f);
-  c /= 2.0f;
-  expect_complex_eq(c, 2.0f, 1.0f);
+  complex<float> dut(4.0f, 2.0f);
+  dut /= 2.0f;
+
+  std::complex<float> ref(4.0f, 2.0f);
+  ref /= 2.0f;
+
+  EXPECT_FLOAT_EQ(dut.real(), ref.real());
+  EXPECT_FLOAT_EQ(dut.imag(), ref.imag());
 }
 
-//
-// Compound assignment with complex
-//
-TEST(ComplexOperators, PlusEqualsComplex)
+// //
+// // Compound assignment with complex
+// //
+TEST(ComplexCompoundOperators, PlusEqualsComplex)
 {
-  complex<float> a(1.0f, 2.0f);
-  complex<float> b(3.0f, -1.0f);
-  a += b;
-  expect_complex_eq(a, 4.0f, 1.0f);
+  complex<float> dut1(1.0f, 2.0f);
+  complex<float> dut2(3.0f, -1.0f);
+  dut1 += dut2;
+
+  std::complex<float> ref1(1.0f, 2.0f);
+  std::complex<float> ref2(3.0f, -1.0f);
+  ref1 += ref2;
+
+  EXPECT_FLOAT_EQ(dut1.real(), ref1.real());
+  EXPECT_FLOAT_EQ(dut1.imag(), ref1.imag());
+  EXPECT_FLOAT_EQ(dut2.real(), ref2.real());
+  EXPECT_FLOAT_EQ(dut2.imag(), ref2.imag());
 }
 
-TEST(ComplexOperators, MinusEqualsComplex)
+TEST(ComplexCompoundOperators, MinusEqualsComplex)
 {
-  complex<float> a(5.0f, 2.0f);
-  complex<float> b(3.0f, 1.0f);
-  a -= b;
-  expect_complex_eq(a, 2.0f, 1.0f);
+  complex<float> dut1(5.0f, 2.0f);
+  complex<float> dut2(3.0f, 1.0f);
+  dut1 -= dut2;
+
+  std::complex<float> ref1(5.0f, 2.0f);
+  std::complex<float> ref2(3.0f, 1.0f);
+  ref1 -= ref2;
+
+  EXPECT_FLOAT_EQ(dut1.real(), ref1.real());
+  EXPECT_FLOAT_EQ(dut1.imag(), ref1.imag());
+  EXPECT_FLOAT_EQ(dut2.real(), ref2.real());
+  EXPECT_FLOAT_EQ(dut2.imag(), ref2.imag());
 }
 
-TEST(ComplexOperators, TimesEqualsComplex)
+TEST(ComplexCompoundOperators, TimesEqualsComplex)
 {
-  complex<float> a(1.0f, 2.0f);
-  complex<float> b(3.0f, 4.0f);
-  a *= b; // (1+2i)*(3+4i) = -5 + 10i
-  expect_complex_eq(a, -5.0f, 10.0f);
+  complex<float> dut1(1.0f, 2.0f);
+  complex<float> dut2(3.0f, 4.0f);
+  dut1 *= dut2;
+
+  complex<float> ref1(1.0f, 2.0f);
+  complex<float> ref2(3.0f, 4.0f);
+  ref1 *= ref2;
+
+  EXPECT_FLOAT_EQ(dut1.real(), ref1.real());
+  EXPECT_FLOAT_EQ(dut1.imag(), ref1.imag());
+  EXPECT_FLOAT_EQ(dut2.real(), ref2.real());
+  EXPECT_FLOAT_EQ(dut2.imag(), ref2.imag());
 }
 
-TEST(ComplexOperators, DivideEqualsComplex)
+TEST(ComplexCompoundOperators, DivideEqualsComplex)
 {
-  complex<float> a(1.0f, 2.0f);
-  complex<float> b(3.0f, 4.0f);
-  a /= b; // (1+2i)/(3+4i) = 11/25 + 2/25 i
-  expect_complex_eq(a, 0.44f, 0.08f, 1e-4f);
+  complex<float> dut1(1.0f, 2.0f);
+  complex<float> dut2(3.0f, 4.0f);
+  dut1 /= dut2;
+
+  complex<float> ref1(1.0f, 2.0f);
+  complex<float> ref2(3.0f, 4.0f);
+  ref1 /= ref2;
+
+  EXPECT_FLOAT_EQ(dut1.real(), ref1.real());
+  EXPECT_FLOAT_EQ(dut1.imag(), ref1.imag());
+  EXPECT_FLOAT_EQ(dut2.real(), ref2.real());
+  EXPECT_FLOAT_EQ(dut2.imag(), ref2.imag());
 }
 
-//
-// Binary ops: complex op complex
-//
+// //
+// // Binary ops: complex op complex
+// //
 TEST(ComplexOperators, AddComplex)
 {
-  complex<float> a(2.0f, 1.0f);
-  complex<float> b(3.0f, 4.0f);
-  auto c = a + b;
-  expect_complex_eq(c, 5.0f, 5.0f);
+  complex<float> dut1(2.0f, 1.0f);
+  complex<float> dut2(3.0f, 4.0f);
+  auto dut3 = dut1 + dut2;
+
+  complex<float> ref1(2.0f, 1.0f);
+  complex<float> ref2(3.0f, 4.0f);
+  auto ref3 = ref1 + ref2;
+
+  EXPECT_FLOAT_EQ(dut3.real(), ref3.real());
+  EXPECT_FLOAT_EQ(dut3.imag(), ref3.imag());
 }
 
 TEST(ComplexOperators, SubComplex)
 {
-  complex<float> a(4.0f, 3.0f);
-  complex<float> b(1.0f, 2.0f);
-  auto c = a - b;
-  expect_complex_eq(c, 3.0f, 1.0f);
+  complex<float> dut1(4.0f, 3.0f);
+  complex<float> dut2(1.0f, 2.0f);
+  auto dut3 = dut1 - dut2;
+
+  std::complex<float> ref1(4.0f, 3.0f);
+  std::complex<float> ref2(1.0f, 2.0f);
+  auto ref3 = ref1 - ref2;
+
+  EXPECT_FLOAT_EQ(dut3.real(), ref3.real());
+  EXPECT_FLOAT_EQ(dut3.imag(), ref3.imag());
 }
 
 TEST(ComplexOperators, MulComplex)
 {
-  complex<float> a(2.0f, 3.0f);
-  complex<float> b(4.0f, -1.0f);
-  auto c = a * b; // (2+3i)*(4-1i) = 11 + 10i
-  expect_complex_eq(c, 11.0f, 10.0f);
+  complex<float> dut1(4.0f, 3.0f);
+  complex<float> dut2(1.0f, 2.0f);
+  auto dut3 = dut1 * dut2;
+
+  std::complex<float> ref1(4.0f, 3.0f);
+  std::complex<float> ref2(1.0f, 2.0f);
+  auto ref3 = ref1 * ref2;
+
+  EXPECT_FLOAT_EQ(dut3.real(), ref3.real());
+  EXPECT_FLOAT_EQ(dut3.imag(), ref3.imag());
 }
 
 TEST(ComplexOperators, DivComplex)
 {
-  complex<float> a(1.0f, 2.0f);
-  complex<float> b(2.0f, 1.0f);
-  auto c = a / b; // (1+2i)/(2+1i) = 0.8 + 0.6i
-  expect_complex_eq(c, 0.8f, 0.6f, 1e-4f);
+  complex<float> dut1(4.0f, 3.0f);
+  complex<float> dut2(1.0f, 2.0f);
+  auto dut3 = dut1 / dut2;
+
+  std::complex<float> ref1(4.0f, 3.0f);
+  std::complex<float> ref2(1.0f, 2.0f);
+  auto ref3 = ref1 / ref2;
+
+  EXPECT_FLOAT_EQ(dut3.real(), ref3.real());
+  EXPECT_FLOAT_EQ(dut3.imag(), ref3.imag());
 }
 
-//
-// Binary ops: complex op scalar
-//
+// //
+// // Binary ops: complex op scalar
+// //
 TEST(ComplexOperators, AddScalarRight)
 {
-  complex<float> a(1.0f, 2.0f);
-  auto c = a + 3.0f;
-  expect_complex_eq(c, 4.0f, 2.0f);
+  complex<float> dut1(1.0f, 2.0f);
+  auto dut2 = dut1 + 3.0f;
+
+  std::complex<float> ref1(1.0f, 2.0f);
+  auto ref2 = ref1 + 3.0f;
+
+  EXPECT_FLOAT_EQ(dut2.real(), ref2.real());
+  EXPECT_FLOAT_EQ(dut2.imag(), ref2.imag());
 }
 
 TEST(ComplexOperators, SubScalarRight)
 {
-  complex<float> a(5.0f, 1.0f);
-  auto c = a - 2.0f;
-  expect_complex_eq(c, 3.0f, 1.0f);
+  complex<float> dut1(5.0f, 1.0f);
+  auto dut2 = dut1 - 3.0f;
+
+  std::complex<float> ref1(5.0f, 1.0f);
+  auto ref2 = ref1 - 3.0f;
+
+  EXPECT_FLOAT_EQ(dut2.real(), ref2.real());
+  EXPECT_FLOAT_EQ(dut2.imag(), ref2.imag());
 }
 
 TEST(ComplexOperators, MulScalarRight)
 {
-  complex<float> a(2.0f, 3.0f);
-  auto c = a * 2.0f;
-  expect_complex_eq(c, 4.0f, 6.0f);
+  complex<float> dut1(2.0f, 3.0f);
+  auto dut2 = dut1 * 2.0f;
+
+  std::complex<float> ref1(2.0f, 3.0f);
+  auto ref2 = ref1 * 2.0f;
+
+  EXPECT_FLOAT_EQ(dut2.real(), ref2.real());
+  EXPECT_FLOAT_EQ(dut2.imag(), ref2.imag());
 }
 
 TEST(ComplexOperators, DivScalarRight)
 {
-  complex<float> a(4.0f, 2.0f);
-  auto c = a / 2.0f;
-  expect_complex_eq(c, 2.0f, 1.0f);
+  complex<float> dut1(4.0f, 2.0f);
+  auto dut2 = dut1 / 2.0f;
+
+  std::complex<float> ref1(4.0f, 2.0f);
+  auto ref2 = ref1 / 2.0f;
+
+  EXPECT_FLOAT_EQ(dut2.real(), ref2.real());
+  EXPECT_FLOAT_EQ(dut2.imag(), ref2.imag());
 }
 
 //
@@ -222,30 +318,50 @@ TEST(ComplexOperators, DivScalarRight)
 //
 TEST(ComplexOperators, AddScalarLeft)
 {
-  complex<float> a(1.0f, 2.0f);
-  auto c = 3.0f + a;
-  expect_complex_eq(c, 4.0f, 2.0f);
+  complex<float> dut1(1.0f, 2.0f);
+  auto dut2 = 3.0f + dut1;
+
+  std::complex<float> ref1(1.0f, 2.0f);
+  auto ref2 = 3.0f + ref1;
+
+  EXPECT_FLOAT_EQ(dut2.real(), ref2.real());
+  EXPECT_FLOAT_EQ(dut2.imag(), ref2.imag());
 }
 
 TEST(ComplexOperators, SubScalarLeft)
 {
-  complex<float> a(1.0f, 2.0f);
-  auto c = 3.0f - a;
-  expect_complex_eq(c, 2.0f, -2.0f);
+  complex<float> dut1(1.0f, 2.0f);
+  auto dut2 = 3.0f - dut1;
+
+  std::complex<float> ref1(1.0f, 2.0f);
+  auto ref2 = 3.0f - ref1;
+
+  EXPECT_FLOAT_EQ(dut2.real(), ref2.real());
+  EXPECT_FLOAT_EQ(dut2.imag(), ref2.imag()) << dut2 << " " << ref2 << "\n";
 }
 
 TEST(ComplexOperators, MulScalarLeft)
 {
-  complex<float> a(2.0f, -1.0f);
-  auto c = 2.0f * a;
-  expect_complex_eq(c, 4.0f, -2.0f);
+  complex<float> dut1(2.0f, -1.0f);
+  auto dut2 = 3.0f * dut1;
+
+  std::complex<float> ref1(2.0f, -1.0f);
+  auto ref2 = 3.0f * ref1;
+
+  EXPECT_FLOAT_EQ(dut2.real(), ref2.real());
+  EXPECT_FLOAT_EQ(dut2.imag(), ref2.imag());
 }
 
 TEST(ComplexOperators, DivScalarLeft)
 {
-  complex<float> a(1.0f, 1.0f);
-  auto c = 2.0f / a;
-  expect_complex_eq(c, 1.0f, -1.0f, 1e-4f);
+  complex<float> dut1(4.27f, 19.235f);
+  auto dut2 = 2.0f / dut1;
+
+  std::complex<float> ref1(4.27f, 19.235f);
+  auto ref2 = 2.0f / ref1;
+
+  EXPECT_FLOAT_EQ(dut2.real(), ref2.real());
+  EXPECT_FLOAT_EQ(dut2.imag(), ref2.imag());
 }
 
 int

@@ -23,12 +23,12 @@ target_link_libraries(complex_test GTest::gtest_main)
 include(GoogleTest)
 gtest_discover_tests(complex_test)
 
-add_custom_target(run_tests ALL
-  COMMAND ${CMAKE_CTEST_COMMAND}
-  DEPENDS complex_test
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-  COMMENT "Running unit tests..."
-)
+# add_custom_target(run_tests ALL
+#   COMMAND ${CMAKE_CTEST_COMMAND} --verbose --output-on-failure
+#   DEPENDS complex_test
+#   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+#   COMMENT "Running unit tests..."
+# )
 
 # footer-begin ------------------------------------------
 # default.PlainText

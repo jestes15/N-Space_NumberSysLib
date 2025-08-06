@@ -18,15 +18,21 @@
 //
 // header-end --------------------------------------------
 
-#include <bits/floatn-common.h>
-#include <cmath>
+#include "hypercomplex/complex.hpp"
 #include <complex>
 #include <iostream>
-#include <stdfloat>
 
 int
 main()
 {
+  hypercomplex::complex<float> c(1.0f, 2.0f);
+  c *= 2.0f;
+
+  std::complex<float> o(1.0f, 2.0f);
+  o *= 2.0f;
+
+  std::cout << c << "\n";
+  std::cout << o << "\n";
 }
 
 // footer-begin ------------------------------------------

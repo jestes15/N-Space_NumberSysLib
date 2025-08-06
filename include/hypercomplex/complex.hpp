@@ -142,22 +142,22 @@ public:
   {
   }
 
-  constexpr _UnderlyingType
+  inline constexpr _UnderlyingType
   real() const
   {
     return _real;
   }
-  constexpr void
+  inline constexpr void
   real(_UnderlyingType _val)
   {
     _real = _val;
   }
-  constexpr _UnderlyingType
+  inline constexpr _UnderlyingType
   imag() const
   {
     return _imag;
   }
-  constexpr void
+  inline constexpr void
   imag(_UnderlyingType _val)
   {
     _imag = _val;
@@ -170,28 +170,30 @@ public:
     _imag = _UnderlyingType();
     return *this;
   }
-  constexpr complex &
+  inline constexpr complex &
   operator+=(const _UnderlyingType &rhs)
   {
     _real += rhs;
     return *this;
   }
-  constexpr complex &
+  inline constexpr complex &
   operator-=(const _UnderlyingType &rhs)
   {
     _real -= rhs;
     return *this;
   }
-  constexpr complex &
+  inline constexpr complex &
   operator*=(const _UnderlyingType &rhs)
   {
     _real *= rhs;
+    _imag *= rhs;
     return *this;
   }
-  constexpr complex &
+  inline constexpr complex &
   operator/=(const _UnderlyingType &rhs)
   {
     _real /= rhs;
+    _imag /= rhs;
     return *this;
   }
 
@@ -205,7 +207,7 @@ public:
     return *this;
   }
   template <class _Type>
-  constexpr complex &
+  inline constexpr complex &
   operator+=(const complex<_Type> &rhs)
   {
     _real += rhs.real();
@@ -213,7 +215,7 @@ public:
     return *this;
   }
   template <class _Type>
-  constexpr complex &
+  inline constexpr complex &
   operator-=(const complex<_Type> &rhs)
   {
     _real -= rhs.real();
@@ -221,23 +223,22 @@ public:
     return *this;
   }
   template <class _Type>
-  constexpr complex &
+  inline constexpr complex &
   operator*=(const complex<_Type> &rhs)
   {
-    const _Type _t = _real * rhs.real() - _imag * rhs.imag();
     _imag = _real * rhs.imag() + _imag * rhs.real();
-    _real = _t;
+    _real = _real * rhs.real() - _imag * rhs.imag();
     return *this;
   }
 
   // TODO: Fix the math
   template <class _Type>
-  constexpr complex &
+  inline constexpr complex &
   operator/=(const complex<_Type> &rhs)
   {
     const _UnderlyingType _r = _real * rhs.real() + _imag * rhs.imag();
     const _UnderlyingType _norm = norm(rhs);
-    _imag = (_imag * rhs.real() - _real * rhs.imag) / _norm;
+    _imag = (_imag * rhs.real() - _real * rhs.imag()) / _norm;
     _real = _r / _norm;
     return *this;
   }
@@ -245,19 +246,19 @@ public:
 
 // Addition Operators
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator+(const complex<_UnderlyingType> &lhs, const complex<_UnderlyingType> &rhs)
 {
   return complex(lhs.real() + rhs.real(), lhs.imag() + rhs.imag());
 }
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator+(const complex<_UnderlyingType> &lhs, const _UnderlyingType &rhs)
 {
   return complex(lhs.real() + rhs, lhs.imag());
 }
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator+(const _UnderlyingType &lhs, const complex<_UnderlyingType> &rhs)
 {
   return complex(lhs + rhs.real(), rhs.imag());
@@ -265,85 +266,85 @@ operator+(const _UnderlyingType &lhs, const complex<_UnderlyingType> &rhs)
 
 // Subtraction Operators
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator-(const complex<_UnderlyingType> &lhs, const complex<_UnderlyingType> &rhs)
 {
   return complex(lhs.real() - rhs.real(), lhs.imag() - rhs.imag());
 }
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator-(const complex<_UnderlyingType> &lhs, const _UnderlyingType &rhs)
 {
   return complex(lhs.real() - rhs, lhs.imag());
 }
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator-(const _UnderlyingType &lhs, const complex<_UnderlyingType> &rhs)
 {
-  return complex(lhs - rhs.real(), rhs.imag());
+  return complex(lhs - rhs.real(), -rhs.imag());
 }
 
 // Multiplication Operators
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator*(const complex<_UnderlyingType> &lhs, const complex<_UnderlyingType> &rhs)
 {
-  complex<_UnderlyingType> _r = lhs;
-  lhs *= rhs;
-  return _r;
+  _UnderlyingType _r = lhs.real() * rhs.real() - lhs.imag() * rhs.imag();
+  _UnderlyingType _i = lhs.real() * rhs.imag() + lhs.imag() * rhs.real();
+  complex<_UnderlyingType> _t(_r, _i);
+  return _t;
 }
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator*(const complex<_UnderlyingType> &lhs, const _UnderlyingType &rhs)
 {
-  complex<_UnderlyingType> _r = lhs;
-  lhs *= rhs;
-  return _r;
+  _UnderlyingType _r = lhs.real() * rhs;
+  _UnderlyingType _i = lhs.imag() * rhs;
+  complex<_UnderlyingType> _t(_r, _i);
+  return _t;
 }
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator*(const _UnderlyingType &lhs, const complex<_UnderlyingType> &rhs)
 {
-  complex<_UnderlyingType> _r = rhs;
-  rhs *= lhs;
-  return _r;
+  _UnderlyingType _r = lhs * rhs.real();
+  _UnderlyingType _i = lhs * rhs.imag();
+  complex<_UnderlyingType> _t(_r, _i);
+  return _t;
 }
 
 // Division Operators
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator/(const complex<_UnderlyingType> &lhs, const complex<_UnderlyingType> &rhs)
 {
   complex<_UnderlyingType> _r = lhs;
-  _r /= rhs;
-  return _r;
+  return _r /= rhs;
 }
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator/(const complex<_UnderlyingType> &lhs, const _UnderlyingType &rhs)
 {
   complex<_UnderlyingType> _r = lhs;
-  _r /= rhs;
-  return _r;
+  return _r /= rhs;
 }
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator/(const _UnderlyingType &lhs, const complex<_UnderlyingType> &rhs)
 {
   complex<_UnderlyingType> _r = lhs;
-  _r /= rhs;
-  return _r;
+  return _r /= rhs;
 }
 
 // Unary Operators
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator+(const complex<_UnderlyingType> &_z)
 {
   return _z;
 }
 template <typename _UnderlyingType>
-constexpr complex<_UnderlyingType>
+inline constexpr complex<_UnderlyingType>
 operator-(const complex<_UnderlyingType> &_z)
 {
   return complex<_UnderlyingType>(-_z.real(), -_z.imag());
@@ -351,13 +352,13 @@ operator-(const complex<_UnderlyingType> &_z)
 
 // Equality Operators
 template <typename _UnderlyingType>
-constexpr bool
+inline constexpr bool
 operator==(const complex<_UnderlyingType> &rhs, const complex<_UnderlyingType> &lhs)
 {
   return (rhs.real() == lhs.real()) && (rhs.imag() == lhs.imag());
 }
 template <typename _UnderlyingType>
-constexpr bool
+inline constexpr bool
 operator==(const complex<_UnderlyingType> &rhs, const _UnderlyingType &lhs)
 {
   return (rhs.real() == lhs.real()) && (rhs.imag() == 0);
@@ -420,6 +421,7 @@ template <typename _UnderlyingType>
 constexpr complex<_UnderlyingType>
 conj(const complex<_UnderlyingType> &_z)
 {
+  return complex<_UnderlyingType>(_z.real(), -_z.imag());
 }
 template <class _UnderlyingType>
 complex<_UnderlyingType>
