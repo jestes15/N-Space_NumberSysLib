@@ -365,6 +365,7 @@ operator==(const complex<_UnderlyingType> &rhs, const _UnderlyingType &lhs)
 }
 
 // Streaming Operators
+// TODO: Implement the extraction operator
 template <class _UnderlyingType, class charT, class traits>
 std::basic_istream<charT, traits> &
 operator>>(std::basic_istream<charT, traits> &is, complex<_UnderlyingType> &rhs)

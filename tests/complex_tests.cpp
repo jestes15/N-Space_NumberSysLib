@@ -37,6 +37,13 @@ TEST(ComplexTest, ConvertibleTypesConstructor)
   EXPECT_FLOAT_EQ(dut.imag(), 7.0f);
 }
 
+TEST(ComplexTest, MultiTypeConstructor)
+{
+  const complex<float> dut(2.0f, 7);
+  EXPECT_FLOAT_EQ(dut.real(), 2.0f);
+  EXPECT_FLOAT_EQ(dut.imag(), 7.0f);
+}
+
 TEST(ComplexTest, CrossTypeConstructor)
 {
   const complex<float> dut1(3, 4);
@@ -362,6 +369,186 @@ TEST(ComplexOperators, DivScalarLeft)
 
   EXPECT_FLOAT_EQ(dut2.real(), ref2.real());
   EXPECT_FLOAT_EQ(dut2.imag(), ref2.imag());
+}
+
+//
+// Transcendentals: Magnitude
+//
+TEST(ComplexTranscendentals, AbsPosRealPosImag)
+{
+  complex<float> dut(1453.790625f, 318.335665f);
+  auto dut_res = abs(dut);
+
+  std::complex<float> ref(1453.790625f, 318.335665f);
+  auto ref_res = abs(dut);
+
+  EXPECT_FLOAT_EQ(dut_res, ref_res);
+}
+TEST(ComplexTranscendentals, AbsPosRealNegImag)
+{
+  complex<float> dut(1453.790625f, -318.335665f);
+  auto dut_res = abs(dut);
+
+  std::complex<float> ref(1453.790625f, -318.335665f);
+  auto ref_res = abs(dut);
+
+  EXPECT_FLOAT_EQ(dut_res, ref_res);
+}
+TEST(ComplexTranscendentals, AbsNegRealPosImag)
+{
+  complex<float> dut(-1453.790625f, 318.335665f);
+  auto dut_res = abs(dut);
+
+  std::complex<float> ref(-1453.790625f, 318.335665f);
+  auto ref_res = abs(dut);
+
+  EXPECT_FLOAT_EQ(dut_res, ref_res);
+}
+TEST(ComplexTranscendentals, AbsNegRealNegImag)
+{
+  complex<float> dut(-1453.790625f, -318.335665f);
+  auto dut_res = abs(dut);
+
+  std::complex<float> ref(-1453.790625f, -318.335665f);
+  auto ref_res = abs(dut);
+
+  EXPECT_FLOAT_EQ(dut_res, ref_res);
+}
+
+//
+// Transcendentals: Phase Angle of the Complex Number
+//
+TEST(ComplexTranscendentals, ArgPosRealPosImag)
+{
+  complex<float> dut(1453.790625f, 318.335665f);
+  auto dut_res = arg(dut);
+
+  std::complex<float> ref(1453.790625f, 318.335665f);
+  auto ref_res = arg(dut);
+
+  EXPECT_FLOAT_EQ(dut_res, ref_res);
+}
+TEST(ComplexTranscendentals, ArgPosRealNegImag)
+{
+  complex<float> dut(1453.790625f, -318.335665f);
+  auto dut_res = arg(dut);
+
+  std::complex<float> ref(1453.790625f, -318.335665f);
+  auto ref_res = arg(dut);
+
+  EXPECT_FLOAT_EQ(dut_res, ref_res);
+}
+TEST(ComplexTranscendentals, ArgNegRealPosImag)
+{
+  complex<float> dut(-1453.790625f, 318.335665f);
+  auto dut_res = arg(dut);
+
+  std::complex<float> ref(-1453.790625f, 318.335665f);
+  auto ref_res = arg(dut);
+
+  EXPECT_FLOAT_EQ(dut_res, ref_res);
+}
+TEST(ComplexTranscendentals, ArgNegRealNegImag)
+{
+  complex<float> dut(-1453.790625f, -318.335665f);
+  auto dut_res = arg(dut);
+
+  std::complex<float> ref(-1453.790625f, -318.335665f);
+  auto ref_res = arg(dut);
+
+  EXPECT_FLOAT_EQ(dut_res, ref_res);
+}
+
+//
+// Transcendentals: Norm of the Complex Number
+//
+TEST(ComplexTranscendentals, NormPosRealPosImag)
+{
+  complex<float> dut(1453.790625f, 318.335665f);
+  auto dut_res = norm(dut);
+
+  std::complex<float> ref(1453.790625f, 318.335665f);
+  auto ref_res = norm(dut);
+
+  EXPECT_FLOAT_EQ(dut_res, ref_res);
+}
+TEST(ComplexTranscendentals, NormPosRealNegImag)
+{
+  complex<float> dut(1453.790625f, -318.335665f);
+  auto dut_res = norm(dut);
+
+  std::complex<float> ref(1453.790625f, -318.335665f);
+  auto ref_res = norm(dut);
+
+  EXPECT_FLOAT_EQ(dut_res, ref_res);
+}
+TEST(ComplexTranscendentals, NormNegRealPosImag)
+{
+  complex<float> dut(-1453.790625f, 318.335665f);
+  auto dut_res = norm(dut);
+
+  std::complex<float> ref(-1453.790625f, 318.335665f);
+  auto ref_res = norm(dut);
+
+  EXPECT_FLOAT_EQ(dut_res, ref_res);
+}
+TEST(ComplexTranscendentals, NormNegRealNegImag)
+{
+  complex<float> dut(-1453.790625f, -318.335665f);
+  auto dut_res = norm(dut);
+
+  std::complex<float> ref(-1453.790625f, -318.335665f);
+  auto ref_res = norm(dut);
+
+  EXPECT_FLOAT_EQ(dut_res, ref_res);
+}
+
+//
+// Transcendentals: Conjugate of the Complex Number
+//
+TEST(ComplexTranscendentals, ConjPosRealPosImag)
+{
+  complex<float> dut(1453.790625f, 318.335665f);
+  auto dut_res = conj(dut);
+
+  std::complex<float> ref(1453.790625f, 318.335665f);
+  auto ref_res = conj(dut);
+
+  EXPECT_FLOAT_EQ(dut_res.real(), ref_res.real());
+  EXPECT_FLOAT_EQ(dut_res.imag(), ref_res.imag());
+}
+TEST(ComplexTranscendentals, ConjPosRealNegImag)
+{
+  complex<float> dut(1453.790625f, -318.335665f);
+  auto dut_res = conj(dut);
+
+  std::complex<float> ref(1453.790625f, -318.335665f);
+  auto ref_res = conj(dut);
+
+  EXPECT_FLOAT_EQ(dut_res.real(), ref_res.real());
+  EXPECT_FLOAT_EQ(dut_res.imag(), ref_res.imag());
+}
+TEST(ComplexTranscendentals, ConjNegRealPosImag)
+{
+  complex<float> dut(-1453.790625f, 318.335665f);
+  auto dut_res = conj(dut);
+
+  std::complex<float> ref(-1453.790625f, 318.335665f);
+  auto ref_res = conj(dut);
+
+  EXPECT_FLOAT_EQ(dut_res.real(), ref_res.real());
+  EXPECT_FLOAT_EQ(dut_res.imag(), ref_res.imag());
+}
+TEST(ComplexTranscendentals, ConjNegRealNegImag)
+{
+  complex<float> dut(-1453.790625f, -318.335665f);
+  auto dut_res = conj(dut);
+
+  std::complex<float> ref(-1453.790625f, -318.335665f);
+  auto ref_res = conj(dut);
+
+  EXPECT_FLOAT_EQ(dut_res.real(), ref_res.real());
+  EXPECT_FLOAT_EQ(dut_res.imag(), ref_res.imag());
 }
 
 int
