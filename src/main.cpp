@@ -25,14 +25,11 @@
 int
 main()
 {
-  hypercomplex::complex<float> c(1.0f, 2.0f);
-  c *= 2.0f;
+  hypercomplex::complex<float> dut(1.0f, 2.0f);
+  std::complex<float> ref(1.0f, 2.0f);
 
-  std::complex<float> o(1.0f, 2.0f);
-  o *= 2.0f;
-
-  std::cout << c << "\n";
-  std::cout << o << "\n";
+  std::cout << hypercomplex::cot(dut) << "\n";
+  std::cout << 1.0f / std::tan(ref) << "\n";
 }
 
 // footer-begin ------------------------------------------

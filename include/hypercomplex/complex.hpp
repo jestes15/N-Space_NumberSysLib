@@ -17,6 +17,7 @@
 #define COMPLEX_HPP
 
 #include <cmath>
+#include <iostream>
 #include <istream>
 #include <ostream>
 #include <type_traits>
@@ -249,6 +250,43 @@ public:
   }
 };
 
+inline namespace literals
+{
+inline namespace complex_literals
+{
+constexpr complex<float>
+operator""if(long double _num)
+{
+  return complex<float>{ 0.0f, static_cast<float>(_num) };
+}
+constexpr complex<float>
+operator""if(unsigned long long _num)
+{
+  return complex<float>{ 0.0f, static_cast<float>(_num) };
+}
+constexpr complex<double>
+operator""i(long double _num)
+{
+  return complex<float>{ 0.0, static_cast<double>(_num) };
+}
+constexpr complex<double>
+operator""i(unsigned long long _num)
+{
+  return complex<float>{ 0.0, static_cast<double>(_num) };
+}
+constexpr complex<long double>
+operator""il(long double _num)
+{
+  return complex<float>{ 0.0, static_cast<long double>(_num) };
+}
+constexpr complex<long double>
+operator""il(unsigned long long _num)
+{
+  return complex<float>{ 0.0, static_cast<long double>(_num) };
+}
+} // namespace complex_literals
+} // namespace literals
+
 // Addition Operators
 template <typename _UnderlyingType>
 inline constexpr complex<_UnderlyingType>
@@ -381,7 +419,7 @@ template <class _UnderlyingType, class charT, class traits>
 std::basic_ostream<charT, traits> &
 operator<<(std::basic_ostream<charT, traits> &o, const complex<_UnderlyingType> &rhs)
 {
-  o << "(" << rhs.real() << ", " << rhs.imag() << ")";
+  o << "(" << rhs.real() << "," << rhs.imag() << ")";
   return o;
 }
 
@@ -457,6 +495,9 @@ template <typename _UnderlyingType>
 complex<_UnderlyingType>
 sin(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _r = std::sin(_z.real()) * std::cosh(_z.imag());
+  _UnderlyingType _i = std::cos(_z.real()) * std::sinh(_z.imag());
+  return complex<_UnderlyingType>(_r, _i);
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
@@ -467,6 +508,14 @@ template <typename _UnderlyingType>
 complex<_UnderlyingType>
 tan(const complex<_UnderlyingType> &_z)
 {
+  using namespace complex_literals;
+
+  _UnderlyingType _a = _z.real();
+  _UnderlyingType _b = _z.imag();
+  complex<_UnderlyingType> _numerator = std::tan(_a) + 1.0if * std::tanh(_b);
+  complex<_UnderlyingType> _denomerator = 1.0f - 1.0if * std::tan(_a) * std::tanh(_b);
+
+  return complex<_UnderlyingType>(_numerator / _denomerator);
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
@@ -477,6 +526,11 @@ template <typename _UnderlyingType>
 complex<_UnderlyingType>
 cot(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real();
+  _UnderlyingType _b = _z.imag();
+  complex<_UnderlyingType> _numerator = 1.0f + 1.0if * (std::cos(_a) / std::sin(_a)) * (std::cosh(_b) / std::sinh(_b));
+  complex<_UnderlyingType> _denominator = (std::cos(_a) / std::sin(_a)) - 1.0if * (std::cosh(_b) / std::sinh(_b));
+  return complex<_UnderlyingType>(_numerator / _denominator);
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
@@ -558,44 +612,6 @@ complex<_UnderlyingType>
 sqrt(const complex<_UnderlyingType> &)
 {
 }
-
-inline namespace literals
-{
-inline namespace complex_literals
-{
-constexpr complex<float>
-operator""if(long double _num)
-{
-  return complex<float>{ 0.0f, static_cast<float>(_num) };
-}
-constexpr complex<float>
-operator""if(unsigned long long _num)
-{
-  return complex<float>{ 0.0f, static_cast<float>(_num) };
-}
-constexpr complex<double>
-operator""i(long double _num)
-{
-  return complex<float>{ 0.0, static_cast<double>(_num) };
-}
-constexpr complex<double>
-operator""i(unsigned long long _num)
-{
-  return complex<float>{ 0.0, static_cast<double>(_num) };
-}
-constexpr complex<long double>
-operator""il(long double _num)
-{
-  return complex<float>{ 0.0, static_cast<long double>(_num) };
-}
-constexpr complex<long double>
-operator""il(unsigned long long _num)
-{
-  return complex<float>{ 0.0, static_cast<long double>(_num) };
-}
-} // namespace complex_literals
-} // namespace literals
-
 } // namespace hypercomplex
 #endif // COMPLEX_HPP
 
