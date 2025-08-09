@@ -93,17 +93,22 @@ complex<_UnderlyingType> polar(const _UnderlyingType &, const _UnderlyingType & 
 
 // Transcendentals
 template <typename _UnderlyingType> complex<_UnderlyingType> cos(const complex<_UnderlyingType> &);
-template <typename _UnderlyingType> complex<_UnderlyingType> cosh(const complex<_UnderlyingType> &);
 template <typename _UnderlyingType> complex<_UnderlyingType> acos(const complex<_UnderlyingType> &);
-template <typename _UnderlyingType> complex<_UnderlyingType> acosh(const complex<_UnderlyingType> &);
 template <typename _UnderlyingType> complex<_UnderlyingType> sin(const complex<_UnderlyingType> &);
-template <typename _UnderlyingType> complex<_UnderlyingType> sinh(const complex<_UnderlyingType> &);
 template <typename _UnderlyingType> complex<_UnderlyingType> asin(const complex<_UnderlyingType> &);
-template <typename _UnderlyingType> complex<_UnderlyingType> asinh(const complex<_UnderlyingType> &);
 template <typename _UnderlyingType> complex<_UnderlyingType> tan(const complex<_UnderlyingType> &);
-template <typename _UnderlyingType> complex<_UnderlyingType> tanh(const complex<_UnderlyingType> &);
 template <typename _UnderlyingType> complex<_UnderlyingType> atan(const complex<_UnderlyingType> &);
+template <typename _UnderlyingType> complex<_UnderlyingType> cot(const complex<_UnderlyingType> &);
+template <typename _UnderlyingType> complex<_UnderlyingType> acot(const complex<_UnderlyingType> &);
+
+template <typename _UnderlyingType> complex<_UnderlyingType> cosh(const complex<_UnderlyingType> &);
+template <typename _UnderlyingType> complex<_UnderlyingType> acosh(const complex<_UnderlyingType> &);
+template <typename _UnderlyingType> complex<_UnderlyingType> sinh(const complex<_UnderlyingType> &);
+template <typename _UnderlyingType> complex<_UnderlyingType> asinh(const complex<_UnderlyingType> &);
+template <typename _UnderlyingType> complex<_UnderlyingType> tanh(const complex<_UnderlyingType> &);
 template <typename _UnderlyingType> complex<_UnderlyingType> atanh(const complex<_UnderlyingType> &);
+template <typename _UnderlyingType> complex<_UnderlyingType> coth(const complex<_UnderlyingType> &);
+template <typename _UnderlyingType> complex<_UnderlyingType> acoth(const complex<_UnderlyingType> &);
 template <typename _UnderlyingType> complex<_UnderlyingType> exp(const complex<_UnderlyingType> &);
 template <typename _UnderlyingType> complex<_UnderlyingType> log(const complex<_UnderlyingType> &);
 template <typename _UnderlyingType> complex<_UnderlyingType> log10(const complex<_UnderlyingType> &);
@@ -415,7 +420,6 @@ norm(const complex<_UnderlyingType> &_z)
 {
   _UnderlyingType _x = _z.real();
   _UnderlyingType _y = _z.imag();
-
   return _x * _x + _y * _y;
 }
 template <typename _UnderlyingType>
@@ -440,20 +444,13 @@ template <typename _UnderlyingType>
 complex<_UnderlyingType>
 cos(const complex<_UnderlyingType> &_z)
 {
-}
-template <typename _UnderlyingType>
-complex<_UnderlyingType>
-cosh(const complex<_UnderlyingType> &_z)
-{
+  _UnderlyingType _real = std::cos(_z.real()) * std::cosh(_z.imag());
+  _UnderlyingType _imag = -1.0f * std::sin(_z.real()) * std::sinh(_z.imag());
+  return complex<_UnderlyingType>(_real, _imag);
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 acos(const complex<_UnderlyingType> &_z)
-{
-}
-template <typename _UnderlyingType>
-complex<_UnderlyingType>
-acosh(const complex<_UnderlyingType> &_z)
 {
 }
 template <typename _UnderlyingType>
@@ -463,17 +460,7 @@ sin(const complex<_UnderlyingType> &_z)
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
-sinh(const complex<_UnderlyingType> &_z)
-{
-}
-template <typename _UnderlyingType>
-complex<_UnderlyingType>
 asin(const complex<_UnderlyingType> &_z)
-{
-}
-template <typename _UnderlyingType>
-complex<_UnderlyingType>
-asinh(const complex<_UnderlyingType> &_z)
 {
 }
 template <typename _UnderlyingType>
@@ -483,17 +470,57 @@ tan(const complex<_UnderlyingType> &_z)
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
-tanh(const complex<_UnderlyingType> &_z)
-{
-}
-template <typename _UnderlyingType>
-complex<_UnderlyingType>
 atan(const complex<_UnderlyingType> &_z)
 {
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
+cot(const complex<_UnderlyingType> &_z)
+{
+}
+template <typename _UnderlyingType>
+complex<_UnderlyingType>
+acot(const complex<_UnderlyingType> &_z)
+{
+}
+template <typename _UnderlyingType>
+complex<_UnderlyingType>
+cosh(const complex<_UnderlyingType> &_z)
+{
+}
+template <typename _UnderlyingType>
+complex<_UnderlyingType>
+acosh(const complex<_UnderlyingType> &_z)
+{
+}
+template <typename _UnderlyingType>
+complex<_UnderlyingType>
+sinh(const complex<_UnderlyingType> &_z)
+{
+}
+template <typename _UnderlyingType>
+complex<_UnderlyingType>
+asinh(const complex<_UnderlyingType> &_z)
+{
+}
+template <typename _UnderlyingType>
+complex<_UnderlyingType>
+tanh(const complex<_UnderlyingType> &_z)
+{
+}
+template <typename _UnderlyingType>
+complex<_UnderlyingType>
 atanh(const complex<_UnderlyingType> &_z)
+{
+}
+template <typename _UnderlyingType>
+complex<_UnderlyingType>
+coth(const complex<_UnderlyingType> &_z)
+{
+}
+template <typename _UnderlyingType>
+complex<_UnderlyingType>
+acoth(const complex<_UnderlyingType> &_z)
 {
 }
 template <typename _UnderlyingType>

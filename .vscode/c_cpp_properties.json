@@ -7,9 +7,13 @@
                 "/usr/local/include"
             ],
             "defines": [],
-            "cStandard": "c17",
-            "cppStandard": "c++23",
-            "intelliSenseMode": "linux-gcc-x64"
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++23",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPath": "/usr/bin/g++-14",
+            "compilerArgs": [
+                "--std=gnu++23"
+            ]
         }
     ],
     "version": 4
