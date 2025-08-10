@@ -9,7 +9,7 @@
 // Comments:
 //      This header file is based on information from
 //      the ISO C++ Standard in section 28.4.
-//      https://isocpp.org/files/papers/N4860.pdf
+//      https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/n4928.pdf
 //
 // header-end --------------------------------------------
 
@@ -124,7 +124,6 @@ template <typename _UnderlyingType> complex<_UnderlyingType> sqrt(const complex<
 template <typename _UnderlyingType> class complex
 {
   static_assert(std::is_floating_point<_UnderlyingType>::value, "_UnderlyingType must be a floating-point type");
-  // typedef _UnderlyingType value_type;
 
 private:
   // z = _real + i * _image
@@ -254,6 +253,17 @@ inline namespace literals
 {
 inline namespace complex_literals
 {
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4455)
+#elif defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wuser-defined-literals"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wliteral-suffix"
+#endif
+
 constexpr complex<float>
 operator""if(long double _num)
 {
@@ -284,6 +294,15 @@ operator""il(unsigned long long _num)
 {
   return complex<float>{ 0.0, static_cast<long double>(_num) };
 }
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#elif defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
 } // namespace complex_literals
 } // namespace literals
 
@@ -482,14 +501,17 @@ template <typename _UnderlyingType>
 complex<_UnderlyingType>
 cos(const complex<_UnderlyingType> &_z)
 {
-  _UnderlyingType _real = std::cos(_z.real()) * std::cosh(_z.imag());
-  _UnderlyingType _imag = -1.0f * std::sin(_z.real()) * std::sinh(_z.imag());
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
+  _UnderlyingType _real = std::cos(_a) * std::cosh(_b);
+  _UnderlyingType _imag = -1.0f * std::sin(_a) * std::sinh(_b);
   return complex<_UnderlyingType>(_real, _imag);
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 acos(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
+
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
@@ -503,15 +525,13 @@ template <typename _UnderlyingType>
 complex<_UnderlyingType>
 asin(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 tan(const complex<_UnderlyingType> &_z)
 {
-  using namespace complex_literals;
-
-  _UnderlyingType _a = _z.real();
-  _UnderlyingType _b = _z.imag();
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
   complex<_UnderlyingType> _numerator = std::tan(_a) + 1.0if * std::tanh(_b);
   complex<_UnderlyingType> _denomerator = 1.0f - 1.0if * std::tan(_a) * std::tanh(_b);
 
@@ -521,76 +541,100 @@ template <typename _UnderlyingType>
 complex<_UnderlyingType>
 atan(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 cot(const complex<_UnderlyingType> &_z)
 {
-  _UnderlyingType _a = _z.real();
-  _UnderlyingType _b = _z.imag();
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
   complex<_UnderlyingType> _numerator = 1.0f + 1.0if * (std::cos(_a) / std::sin(_a)) * (std::cosh(_b) / std::sinh(_b));
   complex<_UnderlyingType> _denominator = (std::cos(_a) / std::sin(_a)) - 1.0if * (std::cosh(_b) / std::sinh(_b));
-  return complex<_UnderlyingType>(_numerator / _denominator);
+  return complex<_UnderlyingType>(-1.0f * _numerator / _denominator);
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 acot(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 cosh(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
+  _UnderlyingType _r = std::cosh(_a) * std::cos(_b);
+  _UnderlyingType _i = std::sinh(_a) * std::sin(_b);
+  return complex<_UnderlyingType>(_r, _i);
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 acosh(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 sinh(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
+  _UnderlyingType _r = std::sinh(_a) * std::cos(_b);
+  _UnderlyingType _i = std::cosh(_a) * std::sin(_b);
+  return complex<_UnderlyingType>(_r, _i);
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 asinh(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 tanh(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
+  _UnderlyingType _numerator = std::sinh(_a) * std::cos(_b) + 1.0if * std::cosh(_a) * std::sin(_b);
+  _UnderlyingType _denominator = std::cosh(_a) * std::cos(_b) + 1.0if * std::sinh(_a) * std::sin(_b);
+  return complex<_UnderlyingType>(_numerator / _denominator);
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 atanh(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 coth(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
+  _UnderlyingType _numerator = std::cosh(_a) * std::cos(_b) + 1.0if * std::sinh(_a) * std::sin(_b);
+  _UnderlyingType _denominator = std::sinh(_a) * std::cos(_b) + 1.0if * std::cosh(_a) * std::sin(_b);
+  return complex<_UnderlyingType>(_numerator / _denominator);
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 acoth(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 exp(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 log(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 log10(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
 }
 template <typename _UnderlyingType, typename _ExponentialType>
 complex<_UnderlyingType>
@@ -609,8 +653,9 @@ pow(const complex<_UnderlyingType> &, const complex<_UnderlyingType> &)
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
-sqrt(const complex<_UnderlyingType> &)
+sqrt(const complex<_UnderlyingType> &_z)
 {
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
 }
 } // namespace hypercomplex
 #endif // COMPLEX_HPP
