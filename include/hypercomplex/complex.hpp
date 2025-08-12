@@ -492,8 +492,12 @@ proj(const complex<_UnderlyingType> &_z)
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
-polar(const _UnderlyingType &, const _UnderlyingType &)
+polar(const _UnderlyingType &_rho, const _UnderlyingType &_theta)
 {
+  if (!std::isinf(_theta) && !std::isnan(_rho)) {
+    if (std::isinf(_rho))
+  }
+  return complex<_UnderlyingType>(0.0f, 0.0f);
 }
 
 // Transcendentals
@@ -511,14 +515,14 @@ complex<_UnderlyingType>
 acos(const complex<_UnderlyingType> &_z)
 {
   _UnderlyingType _a = _z.real(), _b = _z.imag();
-
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
 sin(const complex<_UnderlyingType> &_z)
 {
-  _UnderlyingType _r = std::sin(_z.real()) * std::cosh(_z.imag());
-  _UnderlyingType _i = std::cos(_z.real()) * std::sinh(_z.imag());
+  _UnderlyingType _a = _z.real(), _b = _z.imag();
+  _UnderlyingType _r = std::sin(_a) * std::cosh(_b);
+  _UnderlyingType _i = std::cos(_a) * std::sinh(_b);
   return complex<_UnderlyingType>(_r, _i);
 }
 template <typename _UnderlyingType>

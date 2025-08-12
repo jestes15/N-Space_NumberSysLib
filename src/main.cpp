@@ -15,11 +15,9 @@
 int
 main()
 {
-  hypercomplex::complex<float> dut(1.0f, 2.0f);
-  std::complex<float> ref(1.0f, 2.0f);
 
-  std::cout << hypercomplex::cot(dut) << "\n";
-  std::cout << 1.0f / std::tan(ref) << "\n";
+  // std::cout << hypercomplex::polar(rho, theta) << "\n";
+  // std::cout << std::polar(rho, theta) << "\n";
 }
 
 // footer-begin ------------------------------------------
