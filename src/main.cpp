@@ -15,9 +15,10 @@
 int
 main()
 {
-
-  // std::cout << hypercomplex::polar(rho, theta) << "\n";
-  // std::cout << std::polar(rho, theta) << "\n";
+	float rho = std::numeric_limits<float>::infinity();
+	float theta = 5;
+	std::cout << hypercomplex::polar(rho, theta) << "\n";
+	std::cout << std::polar(rho, theta) << "\n";
 }
 
 // footer-begin ------------------------------------------
