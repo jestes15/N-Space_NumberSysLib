@@ -490,7 +490,6 @@ template <class _UnderlyingType>
 complex<_UnderlyingType>
 proj(const complex<_UnderlyingType> &_z)
 {
-	
 }
 template <typename _UnderlyingType>
 complex<_UnderlyingType>
@@ -500,8 +499,7 @@ polar(const _UnderlyingType &_rho, const _UnderlyingType &_theta)
 	{
 		if (std::isinf(_rho))
 		{
-			return complex<_UnderlyingType>(std::numeric_limits<_UnderlyingType>::infinity(),
-											std::numeric_limits<_UnderlyingType>::infinity());
+			return complex<_UnderlyingType>(_rho, std::sin(_theta));
 		}
 
 		if (std::signbit(_rho))
@@ -517,7 +515,8 @@ polar(const _UnderlyingType &_rho, const _UnderlyingType &_theta)
 			return complex<_UnderlyingType>(_r, _i);
 		}
 	}
-	return complex<_UnderlyingType>(0.0f, 0.0f);
+	return complex<_UnderlyingType>(std::numeric_limits<_UnderlyingType>::quiet_NaN(),
+									std::numeric_limits<_UnderlyingType>::quiet_NaN());
 }
 
 // Transcendentals

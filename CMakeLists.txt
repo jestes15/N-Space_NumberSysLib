@@ -1,8 +1,8 @@
 # header-begin ------------------------------------------
 # File       : CMakeLists.txt
 #
-# Author      : Unknown Author
-# Email       : unknown@example.com
+# Author      : Joshua E
+# Email       : estesjn2020@gmail.com
 #
 # Created on  : 8/3/2025
 #
@@ -13,17 +13,23 @@ project(HypercomplexNumberLibrary)
 
 enable_testing()
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CUDA_STANDARD 20)
+set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
 set(CMAKE_C_COMPILER "/usr/bin/gcc-14")
 set(CMAKE_CXX_COMPILER "/usr/bin/g++-14")
 
-# set(CMAKE_C_COMPILER "/usr/bin/clang")
-# set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+find_package(CUDAToolkit REQUIRED)
 
-include_directories(include)
+include_directories(include ${CUDAToolkit_INCLUDE_DIRS})
 
 find_package(GTest REQUIRED)
 add_executable(example src/main.cpp)
 add_executable(complex_test tests/complex_tests.cpp)
+
+target_link_libraries(example)
 target_link_libraries(complex_test GTest::gtest_main)
 
 include(GoogleTest)
